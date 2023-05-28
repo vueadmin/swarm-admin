@@ -33,6 +33,12 @@ export default {
     Breadcrumb,
     Hamburger
   },
+  data() {
+    return {
+      size: 'small',
+      circleUrl: ''
+    }
+  },
   computed: {
     ...mapGetters(['sidebar', 'avatar'])
   },

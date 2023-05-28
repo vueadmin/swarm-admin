@@ -129,6 +129,21 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/data',
+    component: Layout,
+    redirect: '/data/index',
+    name: 'Data',
+    meta: { title: '任务管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'index',
+        name: 'TaskIndex',
+        component: () => import('@/views/data/index'),
+        meta: { title: '任务管理', icon: 'el-icon-s-help' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
