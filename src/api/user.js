@@ -7,14 +7,13 @@ export function login(data) {
     data
   })
 }
-
-// export function getInfo(token) {
-//   return request({
-//     url: '/api/v1/users/',
-//     method: 'get',
-//     params: { token }
-//   })
-// }
+export function getList(data) {
+  return request({
+    url: '/api/v1/users',
+    method: 'post',
+    data
+  })
+}
 
 // export function logout() {
 //   return request({

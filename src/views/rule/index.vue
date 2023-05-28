@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getList } from '@/api/tasks'
 
 export default {
   filters: {

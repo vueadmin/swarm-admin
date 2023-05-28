@@ -43,32 +43,32 @@ export const constantRoutes = [
     hidden: true
   },
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        name: 'Dashboard',
-        component: () => import('@/views/dashboard/index'),
-        meta: { title: '看板', icon: 'dashboard' }
-      }
-    ]
-  },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   children: [
+  //     {
+  //       path: 'dashboard',
+  //       name: 'Dashboard',
+  //       component: () => import('@/views/dashboard/index'),
+  //       meta: { title: '看板', icon: 'dashboard' }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/task',
     component: Layout,
     redirect: '/task/index',
     name: 'Task',
-    meta: { title: '任务管理', icon: 'el-icon-s-help' },
+    meta: { title: '监测任务管理', icon: 'dashboard' },
     children: [
       {
         path: 'index',
         name: 'TaskIndex',
         component: () => import('@/views/task/index'),
-        meta: { title: '任务管理', icon: 'el-icon-s-help' }
+        meta: { title: '监测任务管理', icon: 'dashboard' }
       }
     ]
   },
@@ -77,13 +77,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/point/index',
     name: 'Point',
-    meta: { title: '监测点管理', icon: 'el-icon-s-help' },
+    meta: { title: '监测点及人员管理', icon: 'el-icon-tickets' },
     children: [
       {
         path: 'index',
         name: 'PointIndex',
         component: () => import('@/views/point/index'),
-        meta: { title: '监测点', icon: 'el-icon-s-help' }
+        meta: { title: '监测点及人员管理', icon: 'el-icon-tickets' }
       }
     ]
   },
@@ -92,7 +92,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/record/index',
     name: 'Record',
-    meta: { title: '历史数据', icon: 'el-icon-s-help' },
+    meta: { title: '历史数据', icon: 'el-icon-collection-tag' },
     children: [
       // {
       //   path: 'index',
@@ -104,7 +104,7 @@ export const constantRoutes = [
         path: 'download',
         name: 'RecordDownload',
         component: () => import('@/views/download/index'),
-        meta: { title: '下载中心', icon: 'el-icon-s-help' }
+        meta: { title: '历史数据', icon: 'el-icon-collection-tag' }
       }
     ]
   },
@@ -113,19 +113,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/system/index',
     name: 'System',
-    meta: { title: '系统管理', icon: 'el-icon-s-help' },
+    meta: { title: '系统管理', icon: 'el-icon-monitor' },
     children: [
       {
         path: 'user',
         name: 'SystemUser',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'el-icon-s-help' }
+        meta: { title: '用户管理', icon: 'el-icon-user' }
       },
       {
         path: 'rule',
         name: 'SystemRule',
         component: () => import('@/views/rule/index'),
-        meta: { title: '角色管理', icon: 'el-icon-s-help' }
+        meta: { title: '角色管理', icon: 'el-icon-female' }
       }
     ]
   },
@@ -134,13 +134,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/data/index',
     name: 'Data',
-    meta: { title: '任务管理', icon: 'el-icon-s-help' },
+    meta: { title: '数据上报', icon: 'el-icon-s-help' },
     children: [
       {
         path: 'index',
-        name: 'TaskIndex',
+        name: 'DataIndex',
         component: () => import('@/views/data/index'),
-        meta: { title: '任务管理', icon: 'el-icon-s-help' }
+        meta: { title: '数据上报', icon: 'el-icon-s-help' }
       }
     ]
   },

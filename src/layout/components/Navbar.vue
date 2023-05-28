@@ -11,7 +11,7 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
+          <router-link to="/task">
             <el-dropdown-item> 主页 </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
@@ -27,6 +27,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import Cookies from 'js-cookie'
 
 export default {
   components: {
@@ -46,9 +47,9 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
-    async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    logout() {
+      Cookies.remove('token')
+      this.$router.push({ path: '/login' })
     }
   }
 }

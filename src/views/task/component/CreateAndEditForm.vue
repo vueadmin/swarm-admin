@@ -23,31 +23,24 @@
         </el-form-item>
         <div class="city-county">
           <el-form-item label="市:" :label-width="formLabelWidth">
-            <el-select v-model="form.city" placeholder="请选择活动区域">
-              <el-option label="全部" value="1" />
-              <el-option label="太原市" value="2" />
-              <el-option label="大同市" value="3" />
-              <el-option label="晋中市" value="4" />
+            <el-select
+              v-model="form.city"
+              placeholder="请选择活动区域"
+              @visible-change="handleChange"
+              @change="onSelect"
+            >
+              <el-option v-for="(city, index) in cityList" :key="index" :label="city.label" :value="city.value" />
             </el-select>
           </el-form-item>
           <el-form-item class="county" label="县:" :label-width="formLabelWidth">
-            <el-select v-model="form.county" placeholder="请选择活动区域">
-              <el-option label="全部" value="1" />
-              <el-option label="祁县" value="2" />
-              <el-option label="太谷县" value="3" />
-              <el-option label="清徐县" value="4" />
+            <el-select v-model="form.county" placeholder="请选择活动区域" @change="onCounty">
+              <el-option v-for="(county, index) in countyList" :key="index" :label="county.label" :value="county.value" />
             </el-select>
           </el-form-item>
         </div>
         <el-form-item label="监测频次:" :label-width="formLabelWidth">
           <el-select v-model="form.frequency" placeholder="请选择活动区域">
-            <el-option label="两周一次" value="1" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="虫害:" :label-width="formLabelWidth">
-          <el-select v-model="form.pests" placeholder="请选择活动区域">
-            <el-option label="鳞翅目/夜蛾科/番茄潜叶娥" value="1" />
-            <el-option label="鞘翅目/天牛科/松褐天牛" value="2" />
+            <el-option label="两周一次" value="14" />
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" :label-width="formLabelWidth">
@@ -67,6 +60,9 @@
 </template>
 
 <script>
+import { getCreate } from '@/api/tasks'
+import { getCityList, getCityId, getCityUnit } from '@/api/city'
+// import { purifyTime } from '@/utils/time'
 export default {
   name: 'CreateAndEditForm',
   props: {
@@ -78,6 +74,14 @@ export default {
     return {
       task: '',
       formLabelWidth: '80px',
+      cityList: [],
+      cityId: '',
+      countyId: '',
+      department: '',
+      params: {
+        region_id: ''
+      },
+      countyList: [],
       form: {
         name: '',
         date: '',
@@ -113,24 +117,81 @@ export default {
       }
     }
   },
+  created() {
+    this.info()
+  },
   mounted() {
-
   },
   methods: {
+    onCounty(val) {
+      this.countyId = val
+    },
+    async onSelect(val) {
+      this.cityId = val
+      console.log(val, 8809)
+      try {
+        const res = await getCityId(`?region_id=${val}`)
+        this.countyList = res.data.map(item => ({ label: item.name, value: item.id }))
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async handleChange() {
+      try {
+        const res = await getCityId(`?region_id=${this.params.region_id}`)
+        this.cityList = res.data.map(item => ({ label: item.name, value: item.id }))
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async info() {
+      try {
+        const res = await getCityList()
+        this.params.region_id = res.data[0].id
+      } catch (error) {
+        console.log(error)
+      }
+      try {
+        const res = await getCityUnit(`?region_id=${this.params.region_id}`)
+        this.department = res.data[0].id
+        console.log(res, 444)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     onReturn() {
       this.create = false
       this.form.name = ''
       this.form.date = ''
-      this.form.city = '1'
-      this.form.county = '1'
-      this.form.frequency = '1'
-      this.form.pests = '1'
+      this.form.city = ''
+      this.form.county = ''
+      this.form.frequency = '14'
       this.form.Remark = ''
       this.$emit('change', false)
     },
-    onSubmit() {
-      this.create = false
-      this.$emit('change', false, this.form)
+    async onSubmit() {
+      console.log(this.form.date[0].getTime(), 9999)
+      try {
+        const data = {
+          name: this.form.name,
+          start_time: this.form.date[0].getTime(),
+          end_time: this.form.date[1].getTime(),
+          cycle: 14,
+          comment: this.form.Remark,
+          province: this.params.region_id,
+          city: this.cityId || '',
+          district: this.countyId || '',
+          department: this.department
+
+        }
+        const res = await getCreate(data)
+        console.log(res)
+        this.$emit('submit', false)
+        this.create = false
+        this.$emit('change', false, this.form)
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }

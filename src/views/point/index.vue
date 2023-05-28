@@ -56,182 +56,192 @@
             <el-option label="清徐县" value="4" />
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <el-button type="success">查询</el-button>
-          <el-button type="info">重置</el-button>
-        </el-form-item>
       </el-form>
       <el-button
         class="btn"
         size="mini"
         @click="onCreate"
       >{{ btnName }}</el-button>
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane :label="label1" name="first">
-          <el-table
-            v-loading="listLoading"
-            :data="list2"
-            size="small"
-            element-loading-text="Loading"
-            fit
-            highlight-current-row
-            :header-cell-style="{background:'#F5F5F5',color:'#606266'}"
-            @selection-change="handleSelectionChange"
-          >
-            <el-table-column
-              type="selection"
-              width="55"
-            />
-            <el-table-column label="监测点">
-              <template slot-scope="scope">
-                {{ scope.row.Monitoring }}
-              </template>
-            </el-table-column>
-            <el-table-column label="省/县">
-              <template slot-scope="scope">
-                <span>{{ scope.row.cityCounty }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="监测人" style="width: 300px">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.name }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="手机号">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.phone }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="创建时间">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.date }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="生境">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.Habitat }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="作物">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.crop }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="种植方式">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.planting }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="生育期">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.Growth }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="虫害">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.Pests }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="状态">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.state }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="100">
-              <template slot-scope="scope">
-                <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
-                <el-button type="text" size="small" @click="onMore">操作</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="footer">
-            <el-button class="btn-process" v-show="isShow === true" type="danger" size="mini">批量处理</el-button>
-            <el-pagination
-              class="pagination"
-              background
-              layout="prev, pager, next"
-              :total="1000"
-            />
-          </div>
-        </el-tab-pane>
-        <el-tab-pane :label="label2" name="two">
-          <el-table
-            v-loading="listLoading"
-            :data="list"
-            size="small"
-            element-loading-text="Loading"
-            fit
-            highlight-current-row
-            :header-cell-style="{background:'#F5F5F5',color:'#606266'}"
-            @selection-change="handleSelectionChange"
-          >
-            <el-table-column
-              type="selection"
-              width="55"
-            />
-            <el-table-column label="任务名称">
-              <template slot-scope="scope">
-                {{ scope.row.content }}
-              </template>
-            </el-table-column>
-            <el-table-column label="省/县">
-              <template slot-scope="scope">
-                <span>{{ scope.row.cityCounty }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="监测频次" style="width: 300px">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.frequency }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="创建单位">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.unit }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="创建人">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.name }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="开始时间">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.startDate }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="结束时间">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.endDate }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="虫害">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.pests }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="状态">
-              <template slot-scope="scope">
-                <a class="tableText">{{ scope.row.state }}</a>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" width="100">
-              <template slot-scope="scope">
-                <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
-                <el-button type="text" size="small" @click="onMore">操作</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="footer">
-            <el-button class="btn-process" v-show="isShow === true" type="danger" size="mini">批量处理</el-button>
-            <el-pagination
-              class="pagination"
-              background
-              layout="prev, pager, next"
-              :total="1000"
-            />
-          </div>
-        </el-tab-pane>
-      </el-tabs>
+      <el-button
+        class="searchBtn"
+        type="success"
+        size="mini"
+        @click="onSearch"
+      >查询</el-button>
+      <el-button
+        class="infoBtn"
+        type="info"
+        size="mini"
+        @click="onReset"
+      >重置</el-button>
+      <div style="position: relative; z-index: 888">
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+          <el-tab-pane :label="label1" name="first">
+            <el-table
+              v-loading="listLoading"
+              :data="list2"
+              size="small"
+              element-loading-text="Loading"
+              fit
+              highlight-current-row
+              :header-cell-style="{background:'#F5F5F5',color:'#606266'}"
+              @selection-change="handleSelectionChange"
+            >
+              <el-table-column
+                type="selection"
+                width="55"
+              />
+              <el-table-column label="监测点">
+                <template slot-scope="scope">
+                  {{ scope.row.name }}
+                </template>
+              </el-table-column>
+              <el-table-column label="省/县">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.city }}/{{ scope.row.district }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="监测人" style="width: 300px">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.maintainer_username }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="手机号">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.maintainer_phone }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="创建时间">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.created_at }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="生境">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.habitat }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="作物">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.crop }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="种植方式">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.planting_method }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="生育期">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.growth_period }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="状态">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.recognize_status }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="100">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
+                  <el-button type="text" size="small" @click="onMore">操作</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="footer">
+              <el-button v-show="isShow === true" class="btn-process" type="danger" size="mini">批量处理</el-button>
+              <el-pagination
+                class="pagination"
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                layout="prev, pager, next"
+                :total="total"
+              />
+            </div>
+          </el-tab-pane>
+          <el-tab-pane :label="label2" name="two">
+            <el-table
+              v-loading="listLoading"
+              :data="list"
+              size="small"
+              element-loading-text="Loading"
+              fit
+              highlight-current-row
+              :header-cell-style="{background:'#F5F5F5',color:'#606266'}"
+              @selection-change="handleSelectionChange"
+            >
+              <el-table-column
+                type="selection"
+                width="55"
+              />
+              <el-table-column label="任务名称">
+                <template slot-scope="scope">
+                  {{ scope.row.content }}
+                </template>
+              </el-table-column>
+              <el-table-column label="省/县">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.cityCounty }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="监测频次" style="width: 300px">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.frequency }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="创建单位">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.unit }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="创建人">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.name }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="开始时间">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.startDate }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="结束时间">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.endDate }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="虫害">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.pests }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="状态">
+                <template slot-scope="scope">
+                  <a class="tableText">{{ scope.row.state }}</a>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="100">
+                <template slot-scope="scope">
+                  <el-button type="text" size="small" @click="onEdit(scope.row)">编辑</el-button>
+                  <el-button type="text" size="small" @click="onMore">操作</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="footer">
+              <el-button class="btn-process" v-show="isShow === true" type="danger" size="mini">批量处理</el-button>
+              <el-pagination
+                class="pagination"
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                layout="prev, pager, next"
+                :total="total"
+              />
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+
     </div>
     <create-and-edit-form
       v-else
@@ -245,7 +255,7 @@
 </template>
 
 <script>
-// import { getList } from '@/api/table'
+import { getList } from '@/api/monitor'
 import CreateAndEditForm from './component/CreateAndEditForm.vue'
 
 export default {
@@ -266,6 +276,11 @@ export default {
     return {
       tackName: '',
       editList: {},
+      total: null,
+      pageAndSize: {
+        page: 1,
+        size: 50
+      },
       list2: [
         {
           Monitoring: '1',
@@ -364,6 +379,22 @@ export default {
     this.fetchData()
   },
   methods: {
+    handleSizeChange(val) {
+      this.pageAndSize.size = val
+      console.log(`每页 ${val} 条`)
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.pageAndSize.page = val
+      this.fetchData()
+      console.log(`当前页: ${val}`)
+    },
+    onSearch() {
+
+    },
+    onReset() {
+
+    },
     onEdit(row) {
       if (this.monitor !== '0') {
         this.tackName = '编辑监测人'
@@ -408,12 +439,17 @@ export default {
       }
       this.multipleSelection = val
     },
-    fetchData() {
-      // this.listLoading = true
-      // getList().then((response) => {
-      //   this.list = response.data.items.splice(0, 10)
-      //   this.listLoading = false
-      // })
+    async fetchData() {
+      this.listLoading = true
+      if (this.monitor === '0') {
+        try {
+          const res = await getList()
+          this.list2 = res.data
+          this.listLoading = false
+        } catch (error) {
+          console.log(error)
+        }
+      }
     },
     onSubmit() {
       console.log('submit!')
@@ -430,7 +466,22 @@ export default {
   color: #fff;
   border-radius: 5px;
   margin-bottom: 20px;
-  // margin-left: 120px;
+  position: absolute;
+  left: 250px;
+  top: 120px;
+  z-index: 999;
+}
+.searchBtn {
+  position: absolute;
+  right: 100px;
+  top: 120px;
+  z-index: 999;
+}
+.infoBtn {
+  position: absolute;
+  right: 20px;
+  top: 120px;
+  z-index: 999;
 }
 .btn:hover {
   background-color: #6d6b6b;
