@@ -6,7 +6,7 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: '/', // url = base url + request url
+  baseURL: 'https://dev-api.cbtbio.cn', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
   // headers: {
