@@ -14,6 +14,7 @@
         </el-form-item>
         <el-form-item label="活动时间:" :label-width="formLabelWidth">
           <el-date-picker
+            @change="onChange"
             v-model="form.date"
             type="daterange"
             range-separator="至"
@@ -33,18 +34,18 @@
             </el-select>
           </el-form-item>
           <el-form-item class="county" label="县:" :label-width="formLabelWidth">
-            <el-select v-model="form.county" placeholder="请选择活动区域" @change="onCounty">
+            <el-select v-model="form.district" placeholder="请选择活动区域" @change="onCounty">
               <el-option v-for="(county, index) in countyList" :key="index" :label="county.label" :value="county.value" />
             </el-select>
           </el-form-item>
         </div>
         <el-form-item label="监测频次:" :label-width="formLabelWidth">
-          <el-select v-model="form.frequency" placeholder="请选择活动区域">
+          <el-select v-model="form.cycle" placeholder="请选择活动区域">
             <el-option label="两周一次" value="14" />
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" :label-width="formLabelWidth">
-          <el-input v-model="form.Remark" type="textarea" />
+          <el-input v-model="form.comment" type="textarea" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -62,6 +63,7 @@
 <script>
 import { getCreate } from '@/api/tasks'
 import { getCityList, getCityId, getCityUnit } from '@/api/city'
+import { formatList } from '@/utils/time'
 // import { purifyTime } from '@/utils/time'
 export default {
   name: 'CreateAndEditForm',
@@ -85,11 +87,10 @@ export default {
       form: {
         name: '',
         date: '',
-        city: '1',
-        county: '1',
-        frequency: '1',
-        pests: '1',
-        Remark: ''
+        city: '',
+        district: '',
+        cycle: '',
+        comment: ''
       },
       create: false
     }
@@ -112,8 +113,15 @@ export default {
     editList: {
       immediate: true,
       handler(newV, oldV) {
-        this.form = newV
-        console.log(newV, oldV)
+        if (this.task === '编辑任务') {
+          this.form.name = newV.name
+          this.form.date = [formatList(newV.start_time), formatList(newV.end_time)]
+          this.form.city = newV.city
+          this.form.district = newV.district
+          this.form.cycle = newV.city
+          this.form.comment = newV.comment
+        }
+        console.log(newV, oldV, 87644)
       }
     }
   },
@@ -140,9 +148,14 @@ export default {
       try {
         const res = await getCityId(`?region_id=${this.params.region_id}`)
         this.cityList = res.data.map(item => ({ label: item.name, value: item.id }))
+        console.log(res, 877666)
       } catch (error) {
         console.log(error)
       }
+    },
+    onChange(value) {
+      this.form.date = value
+      console.log(this.form.date, 765)
     },
     async info() {
       try {
@@ -161,13 +174,17 @@ export default {
     },
     onReturn() {
       this.create = false
-      this.form.name = ''
-      this.form.date = ''
-      this.form.city = ''
-      this.form.county = ''
-      this.form.frequency = '14'
-      this.form.Remark = ''
+      if (this.create === false) {
+        this.form.name = ''
+        this.form.date = ''
+        this.form.city = ''
+        this.form.district = ''
+        this.form.cycle = ''
+        this.form.comment = ''
+      }
+
       this.$emit('change', false)
+      this.$emit('submit', false)
     },
     async onSubmit() {
       console.log(this.form.date[0].getTime(), 9999)
@@ -177,7 +194,7 @@ export default {
           start_time: this.form.date[0].getTime(),
           end_time: this.form.date[1].getTime(),
           cycle: 14,
-          comment: this.form.Remark,
+          comment: this.form.comment,
           province: this.params.region_id,
           city: this.cityId || '',
           district: this.countyId || '',
@@ -185,10 +202,16 @@ export default {
 
         }
         const res = await getCreate(data)
-        console.log(res)
-        this.$emit('submit', false)
         this.create = false
-        this.$emit('change', false, this.form)
+        this.$emit('submit', false)
+        this.$emit('change', false)
+        console.log(res)
+        this.form.name = ''
+        this.form.date = ''
+        this.form.city = ''
+        this.form.district = ''
+        this.form.cycle = ''
+        this.form.comment = ''
       } catch (error) {
         console.log(error)
       }

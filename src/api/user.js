@@ -14,6 +14,13 @@ export function getList(data) {
     data
   })
 }
+export function getUserList(params) {
+  return request({
+    url: '/api/v1/users',
+    method: 'get',
+    params
+  })
+}
 
 // export function logout() {
 //   return request({

@@ -7,17 +7,14 @@
         size="mini"
         class="demo-form-inline"
       >
-        <el-form-item label="监管点">
-          <el-input v-model="formInline.user1" placeholder="任务名称" />
+        <el-form-item label="任务名称">
+          <el-input v-model="formInline.comment" placeholder="任务名称" />
         </el-form-item>
         <el-form-item label="创建单位">
           <el-input v-model="formInline.user2" placeholder="创建单位" />
         </el-form-item>
         <el-form-item label="检测人">
-          <el-input v-model="formInline.user3" placeholder="创建人" />
-        </el-form-item>
-        <el-form-item label="虫害">
-          <el-input v-model="formInline.user4" placeholder="虫害" />
+          <el-input v-model="formInline.id" placeholder="创建人" />
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
@@ -28,7 +25,7 @@
             end-placeholder="结束日期"
           />
         </el-form-item>
-        <el-form-item label="状态">
+        <!-- <el-form-item label="状态">
           <el-select v-model="formInline.region1" placeholder="活动区域">
             <el-option label="全部" value="1" />
             <el-option label="正常" value="2" />
@@ -36,13 +33,10 @@
             <el-option label="停止" value="4" />
             <el-option label="未开始" value="5" />
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="监测频次">
-          <el-select v-model="formInline.region2" placeholder="活动区域">
-            <el-option label="全部" value="1" />
-            <el-option label="每月一次" value="2" />
-            <el-option label="每周一次" value="3" />
-            <el-option label="自定义时间" value="4" />
+          <el-select v-model="formInline.cycle" placeholder="活动区域">
+            <el-option label="两周一次" value="14" />
           </el-select>
         </el-form-item>
         <!-- <el-form-item>
@@ -86,7 +80,7 @@
               />
               <el-table-column label="任务名称">
                 <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.name }}</a>
+                  <a>{{ scope.row.name }}</a>
                 </template>
               </el-table-column>
               <el-table-column label="省/县">
@@ -111,12 +105,12 @@
               </el-table-column>
               <el-table-column label="开始时间">
                 <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.start_time }}</a>
+                  <a class="tableText">{{ formatList(scope.row.start_time) }}</a>
                 </template>
               </el-table-column>
               <el-table-column label="结束时间">
                 <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.end_time }}</a>
+                  <a class="tableText">{{ formatList(scope.row.end_time) }}</a>
                 </template>
               </el-table-column>
 
@@ -156,6 +150,7 @@
 <script>
 import { getList } from '@/api/tasks'
 import CreateAndEditForm from './component/CreateAndEditForm.vue'
+import { formatList, purifyTime } from '@/utils/time'
 
 export default {
   filters: {
@@ -173,6 +168,7 @@ export default {
   },
   data() {
     return {
+      formatList,
       tackName: '',
       editList: {},
       list: [
@@ -191,13 +187,6 @@ export default {
       isShow: false,
       showCreate: false,
       formInline: {
-        user1: '',
-        user2: '',
-        user3: '',
-        user4: '',
-        date: '',
-        region1: '1',
-        region2: '1'
       },
       multipleSelection: [],
       dialogFormVisible: false,
@@ -218,8 +207,16 @@ export default {
       this.fetchData()
       console.log(`当前页: ${val}`)
     },
-    onSearch() {
-
+    async onSearch() {
+      try {
+        // const params = {
+        //   city: this.
+        // }
+        // const res = await getList(params)
+      } catch (error) {
+        console.log(error)
+      }
+      console.log(this.formInline, 999)
     },
     onReset() {
 
@@ -282,19 +279,16 @@ export default {
   margin-bottom: 20px;
   position: absolute;
   left: 125px;
-  top: 120px;
   z-index: 999;
 }
 .searchBtn {
   position: absolute;
   right: 100px;
-  top: 120px;
   z-index: 999;
 }
 .infoBtn {
   position: absolute;
   right: 20px;
-  top: 120px;
   z-index: 999;
 }
 .btn:hover {

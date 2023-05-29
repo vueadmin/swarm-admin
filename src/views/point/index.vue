@@ -7,7 +7,7 @@
         size="mini"
         class="demo-form-inline"
       >
-        <el-form-item v-if="monitor !== '1'" label="任务名称">
+        <el-form-item v-if="monitor !== '1'" label="监测点">
           <el-input v-model="formInline.user1" placeholder="任务名称" />
         </el-form-item>
         <el-form-item v-if="monitor !== '1'" label="创建单位">
@@ -18,9 +18,6 @@
         </el-form-item>
         <el-form-item v-if="monitor === '1'" label="手机号">
           <el-input v-model="formInline.phone" placeholder="创建人" />
-        </el-form-item>
-        <el-form-item v-if="monitor !== '1'" label="虫害">
-          <el-input v-model="formInline.user4" placeholder="虫害" />
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
@@ -103,7 +100,7 @@
               </el-table-column>
               <el-table-column label="监测人" style="width: 300px">
                 <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.maintainer_username }}</a>
+                  <a class="tableText">{{ scope.row.maintainer_name }}</a>
                 </template>
               </el-table-column>
               <el-table-column label="手机号">
@@ -134,11 +131,6 @@
               <el-table-column label="生育期">
                 <template slot-scope="scope">
                   <a class="tableText">{{ scope.row.growth_period }}</a>
-                </template>
-              </el-table-column>
-              <el-table-column label="状态">
-                <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.recognize_status }}</a>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">
@@ -175,49 +167,24 @@
                 type="selection"
                 width="55"
               />
-              <el-table-column label="任务名称">
+              <el-table-column label="监测人">
                 <template slot-scope="scope">
-                  {{ scope.row.content }}
+                  {{ scope.row.username }}
                 </template>
               </el-table-column>
               <el-table-column label="省/县">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.cityCounty }}</span>
+                  <span>{{ scope.row.city }}/{{ scope.row.district }}/{{ scope.row.village}}</span>
                 </template>
               </el-table-column>
-              <el-table-column label="监测频次" style="width: 300px">
+              <el-table-column label="手机号" style="width: 300px">
                 <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.frequency }}</a>
+                  <a class="tableText">{{ scope.row.phone }}</a>
                 </template>
               </el-table-column>
-              <el-table-column label="创建单位">
+              <el-table-column label="创建时间">
                 <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.unit }}</a>
-                </template>
-              </el-table-column>
-              <el-table-column label="创建人">
-                <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.name }}</a>
-                </template>
-              </el-table-column>
-              <el-table-column label="开始时间">
-                <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.startDate }}</a>
-                </template>
-              </el-table-column>
-              <el-table-column label="结束时间">
-                <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.endDate }}</a>
-                </template>
-              </el-table-column>
-              <el-table-column label="虫害">
-                <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.pests }}</a>
-                </template>
-              </el-table-column>
-              <el-table-column label="状态">
-                <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.state }}</a>
+                  <a class="tableText">{{ scope.row.start_time }}</a>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="100">
@@ -232,10 +199,10 @@
               <el-pagination
                 class="pagination"
                 background
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
+                @size-change="handleSizeChanges"
+                @current-change="handleCurrentChanges"
                 layout="prev, pager, next"
-                :total="total"
+                :total="totals"
               />
             </div>
           </el-tab-pane>
@@ -250,12 +217,15 @@
       :edit-list="editList"
       :monitor="monitor"
       @change="onChange"
+      @submit1="OnSubmit1"
+      @submit2="OnSubmit2"
     />
   </div>
 </template>
 
 <script>
 import { getList } from '@/api/monitor'
+import { getUserList } from '@/api/user'
 import CreateAndEditForm from './component/CreateAndEditForm.vue'
 
 export default {
@@ -277,81 +247,13 @@ export default {
       tackName: '',
       editList: {},
       total: null,
+      totals: null,
       pageAndSize: {
         page: 1,
         size: 50
       },
-      list2: [
-        {
-          Monitoring: '1',
-          cityCounty: '2',
-          name: '3',
-          phone: '4',
-          date: '4',
-          Habitat: '4',
-          crop: '4',
-          planting: '4',
-          Growth: '4',
-          state: '5'
-        }
-      ],
-      list: [
-        {
-          content: '虫',
-          cityCounty: '凌源/大河北',
-          frequency: '每周二次',
-          unit: '辽宁',
-          name: '丁海超',
-          startDate: '2023年05月27日',
-          endDate: '2023年05月29日',
-          pests: '蜈蚣',
-          state: '未开始'
-        },
-        {
-          content: '虫',
-          cityCounty: '凌源/大河北',
-          frequency: '每周二次',
-          unit: '辽宁',
-          name: '丁海超',
-          startDate: '2023年05月27日',
-          endDate: '2023年05月29日',
-          pests: '蜈蚣',
-          state: '未开始'
-        },
-        {
-          content: '虫',
-          cityCounty: '凌源/大河北',
-          frequency: '每周二次',
-          unit: '辽宁',
-          name: '丁海超',
-          startDate: '2023年05月27日',
-          endDate: '2023年05月29日',
-          pests: '蜈蚣',
-          state: '未开始'
-        },
-        {
-          content: '虫',
-          cityCounty: '凌源/大河北',
-          frequency: '每周二次',
-          unit: '辽宁',
-          name: '丁海超',
-          startDate: '2023年05月27日',
-          endDate: '2023年05月29日',
-          pests: '蜈蚣',
-          state: '未开始'
-        },
-        {
-          content: '虫',
-          cityCounty: '凌源/大河北',
-          frequency: '每周二次',
-          unit: '辽宁',
-          name: '丁海超',
-          startDate: '2023年05月27日',
-          endDate: '2023年05月29日',
-          pests: '蜈蚣',
-          state: '未开始'
-        }
-      ],
+      list2: [],
+      list: [],
       listLoading: false,
       activeName: 'first',
       label1: '监测点概览',
@@ -378,7 +280,15 @@ export default {
   created() {
     this.fetchData()
   },
+  mounted() {
+  },
   methods: {
+    OnSubmit1() {
+      this.fetchData()
+    },
+    OnSubmit2() {
+      this.inif()
+    },
     handleSizeChange(val) {
       this.pageAndSize.size = val
       console.log(`每页 ${val} 条`)
@@ -387,6 +297,16 @@ export default {
     handleCurrentChange(val) {
       this.pageAndSize.page = val
       this.fetchData()
+      console.log(`当前页: ${val}`)
+    },
+    handleSizeChanges(val) {
+      this.pageAndSize.size = val
+      console.log(`每页 ${val} 条`)
+      this.inif()
+    },
+    handleCurrentChanges(val) {
+      this.pageAndSize.page = val
+      this.inif()
       console.log(`当前页: ${val}`)
     },
     onSearch() {
@@ -421,13 +341,27 @@ export default {
       }
       this.showCreate = true
     },
-    handleClick(val) {
+    async handleClick(val) {
+      if (val.index === '1') {
+        this.inif()
+      }
       this.monitor = val.index
-      console.log(val.index)
+      console.log(this.monitor, 876)
       if (val.index === '1') {
         this.btnName = '创建监测人'
       } else {
         this.btnName = '创建监测点'
+      }
+    },
+    async inif() {
+      this.listLoading = true
+      try {
+        const res = await getUserList()
+        this.list = res.data
+        this.totals = res.total
+        this.listLoading = false
+      } catch (error) {
+        console.log(error)
       }
     },
     handleSelectionChange(val) {
@@ -446,6 +380,7 @@ export default {
           const res = await getList()
           this.list2 = res.data
           this.listLoading = false
+          this.total = res.total
         } catch (error) {
           console.log(error)
         }
@@ -468,19 +403,16 @@ export default {
   margin-bottom: 20px;
   position: absolute;
   left: 250px;
-  top: 120px;
   z-index: 999;
 }
 .searchBtn {
   position: absolute;
   right: 100px;
-  top: 120px;
   z-index: 999;
 }
 .infoBtn {
   position: absolute;
   right: 20px;
-  top: 120px;
   z-index: 999;
 }
 .btn:hover {

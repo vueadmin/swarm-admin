@@ -8,7 +8,7 @@ import { getToken } from '@/utils/auth'
 const service = axios.create({
   baseURL: 'https://dev-api.cbtbio.cn', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  // timeout: 5000 // request timeout
   // headers: {
   //   // Authorization: `Bearer ${localStorage.getItem('access_token')}`
   //   Authorization: getToken()

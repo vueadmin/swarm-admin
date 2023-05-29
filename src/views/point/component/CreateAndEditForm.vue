@@ -12,57 +12,26 @@
         <el-form-item label="监测点名称:" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off" />
         </el-form-item>
-        <div class="city-county">
-          <el-form-item label="市:" :label-width="formLabelWidth">
-            <el-select v-model="form.city" placeholder="请选择活动区域">
-              <el-option label="全部" value="1" />
-              <el-option label="太原市" value="2" />
-              <el-option label="大同市" value="3" />
-              <el-option label="晋中市" value="4" />
-            </el-select>
-          </el-form-item>
-          <el-form-item class="county" label="县:" :label-width="formLabelWidth">
-            <el-select v-model="form.county" placeholder="请选择活动区域">
-              <el-option label="全部" value="1" />
-              <el-option label="祁县" value="2" />
-              <el-option label="太谷县" value="3" />
-              <el-option label="清徐县" value="4" />
-            </el-select>
-          </el-form-item>
-        </div>
-        <el-form-item label="上级单位:" :label-width="formLabelWidth">
-          <el-select v-model="form.unit" placeholder="请选择活动区域">
-            <el-option label="晋中市太谷区植保站" value="1" />
-            <!-- <el-option label="平川" value="2" /> -->
-          </el-select>
-        </el-form-item>
         <el-form-item required label="监测人:" :label-width="formLabelWidth">
-          <el-input v-model="form.maintainer_username" autocomplete="off" />
+          <el-input v-model="form.maintainer_name" autocomplete="off" />
         </el-form-item>
         <el-form-item required label="监测人手机:" :label-width="formLabelWidth">
           <el-input v-model="form.maintainer_phone" autocomplete="off" />
         </el-form-item>
         <div class="city-county">
           <el-form-item class="habitat" label="生境:" :label-width="formLabelWidth">
-            <el-select v-model="form.habitat_id" placeholder="请选择活动区域">
-              <el-option label="丘陵" value="1" />
-              <el-option label="平川" value="2" />
+            <el-select v-model="form.habitat" placeholder="请选择活动区域" @change="onSearch1">
+              <el-option v-for="(habitat, index) in habitatList" :key="index" :label="habitat.label" :value="habitat.value" />
             </el-select>
           </el-form-item>
           <el-form-item class="crop" label="作物:" :label-width="formLabelWidth">
-            <el-select v-model="form.crop_id" placeholder="请选择活动区域">
-              <el-option label="番茄" value="1" />
-              <el-option label="马铃薯" value="2" />
-              <el-option label="茄子" value="3" />
-              <el-option label="辣椒" value="4" />
-              <el-option label="豆角" value="5" />
+            <el-select @change="onSearch2" v-model="form.crop" placeholder="请选择活动区域">
+              <el-option v-for="(crop, index) in cropList" :key="index" :label="crop.label" :value="crop.value" />
             </el-select>
           </el-form-item>
           <el-form-item class="planting" label="种植方式:" :label-width="formLabelWidth">
-            <el-select v-model="form.planting_method_id" placeholder="请选择活动区域">
-              <el-option label="拱棚" value="1" />
-              <el-option label="暖棚" value="2" />
-              <el-option label="露地" value="3" />
+            <el-select @change="onSearch3" v-model="form.planting_method" placeholder="请选择活动区域">
+              <el-option v-for="(planting, index) in planting_methodList" :key="index" :label="planting.label" :value="planting.value" />
             </el-select>
           </el-form-item>
         </div>
@@ -75,9 +44,6 @@
             type="date"
             placeholder="选择日期"
           />
-        </el-form-item>
-        <el-form-item label="备注:" :label-width="formLabelWidth">
-          <el-input v-model="form.Remark" type="textarea" />
         </el-form-item>
       </el-form>
       <el-form v-else :model="formList" size="mini">
@@ -109,6 +75,13 @@
             <el-option label="晋中市太谷区植保站" value="1" />
             <!-- <el-option label="平川" value="2" /> -->
           </el-select>
+        </el-form-item>
+        <el-form-item v-if="task === '编辑监测人'" label="创建时间:" :label-width="formLabelWidth">
+          <el-date-picker
+            v-model="form.date"
+            type="date"
+            placeholder="选择日期"
+          />
         </el-form-item>
         <el-form-item label="监测人手机:" :label-width="formLabelWidth">
           <el-input class="phoneInput" v-model="formList.phone" autocomplete="off" />
@@ -180,7 +153,13 @@ export default {
       department: '',
       townshipList: [],
       countyList: [],
-      cityList: []
+      cityList: [],
+      cropList: [],
+      habitatList: [],
+      planting_methodList: [],
+      cropId: '',
+      habitatId: '',
+      planting_methodId: ''
     }
   },
   watch: {
@@ -201,6 +180,23 @@ export default {
     editList: {
       immediate: true,
       handler(newV, oldV) {
+        if (this.task === '编辑监测点') {
+          this.form.name = newV.name
+          this.form.habitat = newV.habitat
+          this.form.crop = newV.crop
+          this.form.planting_method = newV.planting_method
+          this.form.growth_period = newV.growth_period
+          this.form.maintainer_name = newV.maintainer_name
+          this.form.maintainer_phone = newV.maintainer_phone
+        } else if (this.task === '编辑监测人') {
+          this.formList.username = newV.username
+          // this.formList.password = newV.username
+          this.formList.phone = newV.phone
+          // this.params.region_id = newV.username
+          this.formList.city = newV.city
+          this.formList.district = newV.district
+          this.formList.village = newV.village
+        }
         this.form = newV
         console.log(newV, oldV)
       }
@@ -220,6 +216,15 @@ export default {
 
   },
   methods: {
+    onSearch1(val) {
+      this.habitatId = val
+    },
+    onSearch2(val) {
+      this.cropId = val
+    },
+    onSearch3(val) {
+      this.planting_methodId = val
+    },
     async onCounty(val) {
       this.countyId = val
       console.log(val, 87)
@@ -255,8 +260,13 @@ export default {
     async info() {
       if (this.monitorValue === '0') {
         try {
-          const res = getStations()
-          console.log(res, 8888)
+          const res = await getStations()
+          console.log(res.crop, 7777)
+          this.cropList = res.crop.map(item => ({ label: item.name, value: item.id }))
+          console.log();
+          this.habitatList = res.habitat.map(item => ({ label: item.name, value: item.id }))
+          this.planting_methodList = res.planting_method.map(item => ({ label: item.name, value: item.id }))
+          console.log(this.cropList, 633636)
         } catch (error) {
           console.log(error)
         }
@@ -279,28 +289,48 @@ export default {
     onReturn() {
       this.create = false
       this.form.name = ''
-      this.form.date = ''
-      this.form.city = '1'
-      this.form.county = '1'
-      this.form.frequency = '1'
-      this.form.pests = '1'
-      this.form.Remark = ''
+      this.form.habitat = ''
+      this.form.crop = ''
+      this.form.planting_method = ''
+      this.form.growth_period = ''
+      this.form.maintainer_name = ''
+      this.form.maintainer_phone = ''
+      this.formList.username = ''
+      this.formList.password = ''
+      this.formList.phone = ''
+      this.formList.unit = ''
+      // this.params.region_id = newV.username
+      this.formList.city = ''
+      this.formList.district = ''
+      this.formList.village = ''
       this.$emit('change', false)
+      this.$emit('submit1', false)
+      this.$emit('submit2', false)
     },
     async onSubmit() {
       if (this.monitorValue === '0') {
         try {
           const data = {
             name: this.form.name,
-            // habitat_id:,
-            // crop_id: ,
-            // planting_method_id:,
-            // growth_period:,
-            maintainer_username: this.form.maintainer_username,
+            habitat_id: this.habitatId,
+            crop_id: this.cropId,
+            planting_method_id: this.planting_methodId,
+            growth_period: parseInt(this.form.growth_period),
+            maintainer_username: this.form.maintainer_name,
             maintainer_phone: this.form.maintainer_phone
           }
           const res = await getCreate(data)
           console.log(res)
+          this.create = false
+          this.$emit('submit1', false)
+          this.$emit('change', false, this.form)
+          this.form.name = ''
+          this.form.habitat = ''
+          this.form.crop = ''
+          this.form.planting_method = ''
+          this.form.growth_period = ''
+          this.form.maintainer_name = ''
+          this.form.maintainer_phone = ''
         } catch (error) {
           console.log(error)
         }
@@ -319,12 +349,21 @@ export default {
           }
           const res = await getList(data)
           console.log(res)
+          this.create = false
+          this.$emit('submit2', false)
+          this.$emit('change', false, this.form),
+          this.formList.username = ''
+          this.formList.password = ''
+          this.formList.phone = ''
+          this.formList.unit = ''
+          // this.params.region_id = newV.username
+          this.formList.city = ''
+          this.formList.district = ''
+          this.formList.village = ''
         } catch (error) {
           console.log(error)
         }
       }
-      this.create = false
-      this.$emit('change', false, this.form)
     }
   }
 }
