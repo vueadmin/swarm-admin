@@ -150,7 +150,7 @@
 <script>
 import { getList } from '@/api/tasks'
 import CreateAndEditForm from './component/CreateAndEditForm.vue'
-import { formatList, purifyTime } from '@/utils/time'
+import { formatList } from '@/utils/time'
 
 export default {
   filters: {
