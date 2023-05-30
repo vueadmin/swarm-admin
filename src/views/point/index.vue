@@ -241,7 +241,7 @@ export default {
       totals: null,
       pageAndSize: {
         page: 1,
-        size: 50
+        page_size: 10
       },
       list2: [],
       list: [],
@@ -392,7 +392,7 @@ export default {
     async inif() {
       this.listLoading = true
       try {
-        const res = await getUserList()
+        const res = await getUserList(this.pageAndSize)
         this.list = res.data
         this.totals = res.total
         this.listLoading = false
@@ -413,7 +413,7 @@ export default {
       this.listLoading = true
       if (this.monitor === '0') {
         try {
-          const res = await getList()
+          const res = await getList(this.pageAndSize)
           this.list2 = res.data
           this.listLoading = false
           this.total = res.total

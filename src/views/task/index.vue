@@ -179,7 +179,7 @@ export default {
       total: null,
       pageAndSize: {
         page: 1,
-        size: 50
+        page_size: 10
       },
       listLoading: false,
       activeName: 'first',
@@ -269,7 +269,7 @@ export default {
     },
     fetchData() {
       this.listLoading = true
-      getList().then((response) => {
+      getList(this.pageAndSize).then((response) => {
         this.list = response.data
         this.total = response.total
         console.log(this.total, 777)
