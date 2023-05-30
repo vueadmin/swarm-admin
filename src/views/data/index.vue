@@ -1,7 +1,7 @@
 <template>
   <div class="btn">
-    <el-button class="success" type="success" @click="open">数据上报</el-button>
     <el-button class="info" type="info" @click="onClickDownload">数据下载</el-button>
+    <el-button class="success" type="success" @click="open">数据上报</el-button>
   </div>
 </template>
 
