@@ -33,7 +33,6 @@ export default {
     },
     onClickDownload() {
       const userRule = getUserLevel()
-      const fileName = '虫害数据'
       let filePath = ''
       switch (userRule) {
         case 'admin':
@@ -55,12 +54,12 @@ export default {
           break
       }
 
-      this.downloadExcel(filePath, fileName)
+      this.downloadExcel(filePath)
     },
-    downloadExcel(filePath, fileName) {
+    downloadExcel(filePath) {
       var a = document.createElement('a')
       a.href = filePath
-      a.download = `${fileName}.xlsx`
+      a.download = '虫害数据.xlsx'
       a.style.display = 'none'
       document.body.appendChild(a)
       a.click()

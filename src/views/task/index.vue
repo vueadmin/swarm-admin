@@ -1,12 +1,7 @@
 <template>
   <div class="app-container">
     <div v-if="showCreate === false">
-      <el-form
-        :inline="true"
-        :model="formInline"
-        size="mini"
-        class="demo-form-inline"
-      >
+      <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
         <el-form-item label="任务名称">
           <el-input v-model="formInline.name" placeholder="请输入任务名称" />
         </el-form-item>
@@ -44,23 +39,9 @@
           <el-button type="info">重置</el-button>
         </el-form-item> -->
       </el-form>
-      <el-button
-        class="btn"
-        size="mini"
-        @click="onCreate"
-      >创建任务</el-button>
-      <el-button
-        class="searchBtn"
-        type="success"
-        size="mini"
-        @click="onSearch"
-      >查询</el-button>
-      <el-button
-        class="infoBtn"
-        type="info"
-        size="mini"
-        @click="onReset"
-      >重置</el-button>
+      <el-button class="btn" size="mini" @click="onCreate">创建任务</el-button>
+      <el-button class="searchBtn" type="success" size="mini" @click="onSearch">查询</el-button>
+      <el-button class="infoBtn" type="info" size="mini" @click="onReset">重置</el-button>
       <div style="position: relative; z-index: 888">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
           <el-tab-pane :label="label" name="first">
@@ -71,13 +52,10 @@
               element-loading-text="Loading"
               fit
               highlight-current-row
-              :header-cell-style="{background:'#F5F5F5',color:'#606266'}"
+              :header-cell-style="{ background: '#F5F5F5', color: '#606266' }"
               @selection-change="handleSelectionChange"
             >
-              <el-table-column
-                type="selection"
-                width="55"
-              />
+              <el-table-column type="selection" width="55" />
               <el-table-column label="任务名称">
                 <template slot-scope="scope">
                   <a>{{ scope.row.name }}</a>
@@ -85,7 +63,7 @@
               </el-table-column>
               <el-table-column label="省/县">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.city }}/{{scope.row.district}}</span>
+                  <span>{{ scope.row.city }}/{{ scope.row.district }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="监测频次" style="width: 300px">
@@ -122,18 +100,18 @@
               </el-table-column>
             </el-table>
             <div class="footer">
-              <el-button class="btn-process" v-show="isShow === true" type="danger" size="mini">批量处理</el-button>
+              <el-button v-show="isShow === true" class="btn-process" type="danger" size="mini">批量处理</el-button>
               <el-pagination
                 class="pagination"
                 background
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
                 layout="prev, pager, next"
                 :total="total"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
               />
             </div>
           </el-tab-pane>
-      </el-tabs>
+        </el-tabs>
       </div>
     </div>
     <create-and-edit-form
@@ -186,8 +164,7 @@ export default {
       label: '数据概览',
       isShow: false,
       showCreate: false,
-      formInline: {
-      },
+      formInline: {},
       multipleSelection: [],
       dialogFormVisible: false,
       form: {}
@@ -244,9 +221,7 @@ export default {
       this.editList = row
       console.log(row, 66)
     },
-    onMore() {
-
-    },
+    onMore() {},
     onChange(val, form) {
       console.log(val, form, 88)
       this.showCreate = val
@@ -256,8 +231,7 @@ export default {
       this.tackName = '创建任务'
       this.showCreate = true
     },
-    handleClick(tabName) {
-    },
+    handleClick(tabName) {},
     handleSelectionChange(val) {
       console.log(val)
       if (val.length !== 0) {
@@ -309,7 +283,7 @@ export default {
   background-color: #6d6b6b;
 }
 .tableText {
-  color: rgb(0, 140, 255)
+  color: rgb(0, 140, 255);
 }
 .footer {
   width: 100%;
@@ -320,7 +294,7 @@ export default {
   .btn-process {
     display: flex;
     justify-content: flex-start;
-    }
+  }
   .pagination {
     display: flex;
     width: 100%;
