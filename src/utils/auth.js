@@ -5,6 +5,9 @@ import Cookies from 'js-cookie'
 export function getToken() {
   return 'Bearer ' + Cookies.get('token')
 }
+export function getUserLevel() {
+  return sessionStorage.getItem('user_level')
+}
 
 export function setToken(token) {
   console.log(token, 11111)
@@ -22,4 +25,7 @@ export function setPhone(phone) {
 }
 export function setId(id) {
   return sessionStorage.setItem('id', id)
+}
+export function setUserLevel(user_level) {
+  return sessionStorage.setItem('user_level', user_level)
 }

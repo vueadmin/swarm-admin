@@ -8,16 +8,16 @@
         class="demo-form-inline"
       >
         <el-form-item v-if="monitor !== '1'" label="监测点">
-          <el-input v-model="formInline.user1" placeholder="任务名称" />
+          <el-input v-model="formInline.user1" placeholder="请输入监测点" />
         </el-form-item>
         <el-form-item v-if="monitor !== '1'" label="创建单位">
-          <el-input v-model="formInline.user2" placeholder="创建单位" />
+          <el-input v-model="formInline.user2" placeholder="请输入创建单位" />
         </el-form-item>
         <el-form-item label="监测人">
-          <el-input v-model="formInline.user3" placeholder="创建人" />
+          <el-input v-model="formInline.user3" placeholder="请输入检测人" />
         </el-form-item>
         <el-form-item v-if="monitor === '1'" label="手机号">
-          <el-input v-model="formInline.phone" placeholder="创建人" />
+          <el-input v-model="formInline.phone" placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
@@ -27,15 +27,6 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="formInline.region1" placeholder="活动区域">
-            <el-option label="全部" value="1" />
-            <el-option label="正常" value="2" />
-            <el-option label="暂停" value="3" />
-            <el-option label="停止" value="4" />
-            <el-option label="未开始" value="5" />
-          </el-select>
         </el-form-item>
         <el-form-item label="市:">
           <el-select v-model="formInline.city" placeholder="请选择活动区域">
@@ -309,11 +300,56 @@ export default {
       this.inif()
       console.log(`当前页: ${val}`)
     },
-    onSearch() {
+    async onSearch() {
+      if (this.monitor === '0') {
+        try {
+          const params = {
+            name: this.formInline.name,
+            start_time: this.formInline.date[0].getTime(),
+            end_time: this.formInline.date[1].getTime(),
+            cycle: 14,
+            // province: this.params.region_id,
+            // comment: this.form.comment,
+            userName: this.formInline.userName
+            // city: this.cityId || '',
+            // district: this.countyId || '',
+            // department: this.department
+          }
+          const res = await getList(params)
+          console.log(res, 37737)
+        } catch (error) {
+          console.log(error)
+        }
+        // console.log(this.formInline, 999)
+      } else {
+        try {
+          const params = {
+            name: this.formInline.name,
+            start_time: this.formInline.date[0].getTime(),
+            end_time: this.formInline.date[1].getTime(),
+            cycle: 14,
+            // province: this.params.region_id,
+            // comment: this.form.comment,
+            userName: this.formInline.userName
+            // city: this.cityId || '',
+            // district: this.countyId || '',
+            // department: this.department
+          }
+          const res = await getUserList(params)
+          console.log(res, 37737)
+        } catch (error) {
+          console.log(error)
+        }
+        console.log(this.formInline, 999)
+      }
 
     },
     onReset() {
-
+      this.formInline.name = ''
+      this.formInline
+      this.formInline.userName = ''
+      this.formInline.date = ''
+      this.formInline.cycle = ''
     },
     onEdit(row) {
       if (this.monitor !== '0') {

@@ -10,7 +10,7 @@
       </div>
       <el-form :model="form" size="mini">
         <el-form-item label="任务名称:" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" />
+          <el-input v-model="form.name" autocomplete="off" placeholder="请输入任务名称"  />
         </el-form-item>
         <el-form-item label="活动时间:" :label-width="formLabelWidth">
           <el-date-picker
@@ -26,7 +26,7 @@
           <el-form-item label="市:" :label-width="formLabelWidth">
             <el-select
               v-model="form.city"
-              placeholder="请选择活动区域"
+              placeholder="请选择市"
               @visible-change="handleChange"
               @change="onSelect"
             >
@@ -34,18 +34,18 @@
             </el-select>
           </el-form-item>
           <el-form-item class="county" label="县:" :label-width="formLabelWidth">
-            <el-select v-model="form.district" placeholder="请选择活动区域" @change="onCounty">
+            <el-select v-model="form.district" placeholder="请选择县" @change="onCounty">
               <el-option v-for="(county, index) in countyList" :key="index" :label="county.label" :value="county.value" />
             </el-select>
           </el-form-item>
         </div>
         <el-form-item label="监测频次:" :label-width="formLabelWidth">
-          <el-select v-model="form.cycle" placeholder="请选择活动区域">
+          <el-select v-model="form.cycle" placeholder="请选择监测频次">
             <el-option label="两周一次" value="14" />
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" :label-width="formLabelWidth">
-          <el-input v-model="form.comment" type="textarea" />
+          <el-input v-model="form.comment" type="textarea" placeholder="请输入信息" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

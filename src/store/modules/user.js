@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken, setName, setPhone, setId } from '@/utils/auth'
+import { getToken, setToken, removeToken, setName, setPhone, setId, setUserLevel } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
 const getDefaultState = () => {
@@ -8,7 +8,8 @@ const getDefaultState = () => {
     name: '',
     phone: '',
     id: '',
-    avatar: ''
+    avatar: '',
+    user_level: ''
   }
 }
 
@@ -30,6 +31,9 @@ const mutations = {
   SET_ID: (state, id) => {
     state.id = id
   },
+  USER_LEVEL: (state, user_level) => {
+    state.user_level = user_level
+  },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
   }
@@ -46,7 +50,9 @@ const actions = {
         commit('SET_NAME', data.username)
         commit('SET_PHONE', data.phone)
         commit('SET_ID', data.id)
+        commit('user_level', data.user_level)
         setToken(data.token)
+        setUserLevel(data.user_level)
         setName(data.username)
         setPhone(data.phone)
         setId(data.id)

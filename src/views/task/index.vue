@@ -8,13 +8,13 @@
         class="demo-form-inline"
       >
         <el-form-item label="任务名称">
-          <el-input v-model="formInline.comment" placeholder="任务名称" />
+          <el-input v-model="formInline.name" placeholder="请输入任务名称" />
         </el-form-item>
         <el-form-item label="创建单位">
-          <el-input v-model="formInline.user2" placeholder="创建单位" />
+          <el-input v-model="formInline.user2" placeholder="请输入创建单位" />
         </el-form-item>
-        <el-form-item label="检测人">
-          <el-input v-model="formInline.id" placeholder="创建人" />
+        <el-form-item label="创建人">
+          <el-input v-model="formInline.userName" placeholder="请输入创建人" />
         </el-form-item>
         <el-form-item label="创建时间">
           <el-date-picker
@@ -100,7 +100,7 @@
               </el-table-column>
               <el-table-column label="创建人">
                 <template slot-scope="scope">
-                  <a class="tableText">{{ scope.row.owner_id }}</a>
+                  <a class="tableText">{{ scope.row.owner_name }}</a>
                 </template>
               </el-table-column>
               <el-table-column label="开始时间">
@@ -209,17 +209,31 @@ export default {
     },
     async onSearch() {
       try {
-        // const params = {
-        //   city: this.
-        // }
-        // const res = await getList(params)
+        const data = {
+          name: this.formInline.name,
+          start_time: this.formInline.date[0].getTime(),
+          end_time: this.formInline.date[1].getTime(),
+          cycle: 14,
+          // province: this.params.region_id,
+          // comment: this.form.comment,
+          userName: this.formInline.userName
+          // city: this.cityId || '',
+          // district: this.countyId || '',
+          // department: this.department
+        }
+        const res = await getList(data)
+        console.log(res, 37737)
       } catch (error) {
         console.log(error)
       }
       console.log(this.formInline, 999)
     },
     onReset() {
-
+      this.formInline.name = ''
+      this.formInline
+      this.formInline.userName = ''
+      this.formInline.date = ''
+      this.formInline.cycle = ''
     },
     handleSubmit() {
       this.fetchData()

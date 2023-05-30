@@ -8,35 +8,35 @@
         </el-button>
         <div class="return-text">{{ task }}</div>
       </div>
-      <el-form v-if="monitorValue !== '1'" :model="form" size="mini">
+      <el-form v-if="monitorValue !== '1'" ref="form" :model="form" :rules="rules" size="mini">
         <el-form-item label="监测点名称:" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" />
+          <el-input v-model="form.name" autocomplete="off" placeholder="请输入监测点名称" />
         </el-form-item>
-        <el-form-item required label="监测人:" :label-width="formLabelWidth">
-          <el-input v-model="form.maintainer_name" autocomplete="off" />
+        <el-form-item required prop="maintainer_name" label="监测人:" :label-width="formLabelWidth">
+          <el-input v-model="form.maintainer_name" autocomplete="off" placeholder="请输入监测人" />
         </el-form-item>
-        <el-form-item required label="监测人手机:" :label-width="formLabelWidth">
-          <el-input v-model="form.maintainer_phone" autocomplete="off" />
+        <el-form-item required prop="maintainer_phone" label="监测人手机:" :label-width="formLabelWidth">
+          <el-input v-model="form.maintainer_phone" autocomplete="off" placeholder="请输入手机号" />
         </el-form-item>
         <div class="city-county">
           <el-form-item class="habitat" label="生境:" :label-width="formLabelWidth">
-            <el-select v-model="form.habitat" placeholder="请选择活动区域" @change="onSearch1">
+            <el-select v-model="form.habitat" placeholder="请选择" @change="onSearch1">
               <el-option v-for="(habitat, index) in habitatList" :key="index" :label="habitat.label" :value="habitat.value" />
             </el-select>
           </el-form-item>
           <el-form-item class="crop" label="作物:" :label-width="formLabelWidth">
-            <el-select @change="onSearch2" v-model="form.crop" placeholder="请选择活动区域">
+            <el-select @change="onSearch2" v-model="form.crop" placeholder="请选择">
               <el-option v-for="(crop, index) in cropList" :key="index" :label="crop.label" :value="crop.value" />
             </el-select>
           </el-form-item>
           <el-form-item class="planting" label="种植方式:" :label-width="formLabelWidth">
-            <el-select @change="onSearch3" v-model="form.planting_method" placeholder="请选择活动区域">
+            <el-select @change="onSearch3" v-model="form.planting_method" placeholder="请选择">
               <el-option v-for="(planting, index) in planting_methodList" :key="index" :label="planting.label" :value="planting.value" />
             </el-select>
           </el-form-item>
         </div>
         <el-form-item label="生育期:" :label-width="formLabelWidth">
-          <el-input v-model="form.growth_period" autocomplete="off" />
+          <el-input v-model="form.growth_period" autocomplete="off" placeholder="请输入生育期" />
         </el-form-item>
         <el-form-item v-if="task === '编辑监测点'" label="创建时间:" :label-width="formLabelWidth">
           <el-date-picker
@@ -48,34 +48,33 @@
       </el-form>
       <el-form v-else :model="formList" size="mini">
         <el-form-item label="监测人名称:" :label-width="formLabelWidth">
-          <el-input class="nameInput" v-model="formList.username" autocomplete="off" />
+          <el-input class="nameInput" v-model="formList.username" autocomplete="off" placeholder="请输入监测人名称" />
         </el-form-item>
         <el-form-item label="初始密码:" :label-width="formLabelWidth">
-          <el-input class="nameInput" v-model="formList.password" autocomplete="off" />
+          <el-input class="nameInput" v-model="formList.password" autocomplete="off" placeholder="请输入密码" />
         </el-form-item>
         <div class="city-county">
           <el-form-item label="市:" :label-width="formLabelWidth">
-            <el-select v-model="formList.city" placeholder="请选择活动区域" @visible-change="handleChange" @change="onSelect">
+            <el-select v-model="formList.city" placeholder="请选择" @visible-change="handleChange" @change="onSelect">
               <el-option v-for="(city,index) in cityList" :key="index" :label="city.label" :value="city.value" />
             </el-select>
           </el-form-item>
           <el-form-item class="county" label="县:" :label-width="formLabelWidth">
-            <el-select v-model="formList.district" placeholder="请选择活动区域" @change="onCounty">
+            <el-select v-model="formList.district" placeholder="请选择" @change="onCounty">
               <el-option v-for="(county, index) in countyList" :key="index" :label="county.label" :value="county.value" />
             </el-select>
           </el-form-item>
           <el-form-item class="county" label="乡镇:" :label-width="formLabelWidth">
-            <el-select v-model="formList.village" placeholder="请选择活动区域" @change="onTownship">
+            <el-select v-model="formList.village" placeholder="请选择" @change="onTownship">
               <el-option v-for="(township, index) in townshipList" :key="index" :label="township.label" :value="township.value" />
             </el-select>
           </el-form-item>
         </div>
-        <el-form-item label="上级单位:" :label-width="formLabelWidth">
-          <el-select v-model="formList.unit" placeholder="请选择活动区域">
+        <!-- <el-form-item label="上级单位:" :label-width="formLabelWidth">
+          <el-select v-model="formList.unit" placeholder="请选择上级单位">
             <el-option label="晋中市太谷区植保站" value="1" />
-            <!-- <el-option label="平川" value="2" /> -->
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item v-if="task === '编辑监测人'" label="创建时间:" :label-width="formLabelWidth">
           <el-date-picker
             v-model="form.date"
@@ -105,6 +104,7 @@ import { getCreate, getStations } from '@/api/monitor'
 import { getCityList, getCityId, getCityUnit } from '@/api/city'
 
 import { getList } from '@/api/user'
+import { getUserLevel } from '@/utils/auth'
 export default {
   name: 'CreateAndEditForm',
   props: {
@@ -126,16 +126,28 @@ export default {
       task: '',
       formLabelWidth: '100px',
       monitorValue: '',
+
+      rules: {
+        maintainer_phone: [
+          { required: true, message: '手机号必填', trigger: 'blur' },
+          { pattern: /^1[3456789]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' }
+        ],
+        maintainer_name: [
+          { required: true, message: '检测人必填', trigger: 'blur' },
+          { min: 2, max: 10, message: '请填写监测人', trigger: 'blur' }
+        ]
+      },
       params: {
         region_id: ''
       },
       form: {
         name: '',
         date: '',
-        city: '1',
-        county: '1',
-        frequency: '1',
-        pests: '1',
+        city: '',
+        maintainer_phone: '',
+        county: '',
+        frequency: '',
+        pests: '',
         Remark: ''
       },
       formList: {
@@ -340,7 +352,7 @@ export default {
             username: this.formList.username,
             password: this.formList.password,
             phone: this.formList.phone,
-            user_level: 'admin',
+            user_level: getUserLevel(),
             province: this.params.region_id,
             city: this.cityId,
             district: this.countyId,
