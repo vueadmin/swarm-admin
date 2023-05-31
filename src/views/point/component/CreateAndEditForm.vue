@@ -127,16 +127,16 @@ export default {
       formLabelWidth: '100px',
       monitorValue: '',
 
-      rules: {
-        maintainer_phone: [
-          { required: true, message: '手机号必填', trigger: 'blur' },
-          { pattern: /^1[3456789]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' }
-        ],
-        maintainer_name: [
-          { required: true, message: '检测人必填', trigger: 'blur' },
-          { min: 2, max: 10, message: '请填写监测人', trigger: 'blur' }
-        ]
-      },
+      // rules: {
+      //   maintainer_phone: [
+      //     { required: true, message: '手机号必填', trigger: 'blur' },
+      //     { pattern: /^1[3456789]\d{9}$/, message: '手机号码格式不正确', trigger: 'blur' }
+      //   ],
+      //   maintainer_name: [
+      //     { required: true, message: '检测人必填', trigger: 'blur' },
+      //     { min: 2, max: 10, message: '请填写监测人', trigger: 'blur' }
+      //   ]
+      // },
       params: {
         region_id: ''
       },
@@ -156,7 +156,8 @@ export default {
         city: '',
         county: '',
         Township: '',
-        unit: ''
+        unit: '',
+        village: ''
       },
       create: false,
       townshipId: '',
@@ -314,12 +315,13 @@ export default {
       // this.params.region_id = newV.username
       this.formList.city = ''
       this.formList.district = ''
-      this.formList.village = ''
+      this.formList.village = null
       this.$emit('change', false)
       this.$emit('submit1', false)
       this.$emit('submit2', false)
     },
     async onSubmit() {
+      console.log(this.formList.village === '', 8888)
       if (this.monitorValue === '0') {
         try {
           const data = {
@@ -354,9 +356,9 @@ export default {
             phone: this.formList.phone,
             user_level: getUserLevel(),
             province: this.params.region_id,
-            city: this.cityId,
-            district: this.countyId,
-            village: this.townshipId,
+            city: this.formList.city === '' ? null : this.cityId,
+            district: this.formList.district === '' ? null : this.countyId,
+            village: this.formList.village === '' ? null : this.townshipId,
             department: this.department
           }
           const res = await getList(data)
@@ -371,7 +373,7 @@ export default {
           // this.params.region_id = newV.username
           this.formList.city = ''
           this.formList.district = ''
-          this.formList.village = ''
+          this.formList.village = null
         } catch (error) {
           console.log(error)
         }

@@ -196,8 +196,8 @@ export default {
           cycle: 14,
           comment: this.form.comment,
           province: this.params.region_id,
-          city: this.cityId || '',
-          district: this.countyId || '',
+          city: this.cityId || null,
+          district: this.countyId || null,
           department: this.department
 
         }
