@@ -64,6 +64,8 @@
 import { getCreate } from '@/api/tasks'
 import { getCityList, getCityId, getCityUnit } from '@/api/city'
 import { formatList } from '@/utils/time'
+import lodash from 'lodash'
+
 // import { purifyTime } from '@/utils/time'
 export default {
   name: 'CreateAndEditForm',
@@ -201,7 +203,7 @@ export default {
           department: this.department
 
         }
-        const res = await getCreate(data)
+        const res = await getCreate(lodash.pickBy(data, index => index))
         this.create = false
         this.$emit('submit', false)
         this.$emit('change', false)

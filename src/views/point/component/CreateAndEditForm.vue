@@ -12,10 +12,10 @@
         <el-form-item label="监测点名称:" :label-width="formLabelWidth">
           <el-input v-model="form.name" autocomplete="off" placeholder="请输入监测点名称" />
         </el-form-item>
-        <el-form-item required prop="maintainer_name" label="监测人:" :label-width="formLabelWidth">
+        <el-form-item prop="maintainer_name" label="监测人:" :label-width="formLabelWidth">
           <el-input v-model="form.maintainer_name" autocomplete="off" placeholder="请输入监测人" />
         </el-form-item>
-        <el-form-item required prop="maintainer_phone" label="监测人手机:" :label-width="formLabelWidth">
+        <el-form-item prop="maintainer_phone" label="监测人手机:" :label-width="formLabelWidth">
           <el-input v-model="form.maintainer_phone" autocomplete="off" placeholder="请输入手机号" />
         </el-form-item>
         <div class="city-county">
@@ -105,6 +105,8 @@ import { getCityList, getCityId, getCityUnit } from '@/api/city'
 
 import { getList } from '@/api/user'
 import { getUserLevel } from '@/utils/auth'
+import lodash from 'lodash'
+
 export default {
   name: 'CreateAndEditForm',
   props: {
@@ -361,7 +363,7 @@ export default {
             village: this.formList.village === '' ? null : this.townshipId,
             department: this.department
           }
-          const res = await getList(data)
+          const res = await getList(lodash.pickBy(data, index => index))
           console.log(res)
           this.create = false
           this.$emit('submit2', false)
